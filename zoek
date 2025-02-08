@@ -13,9 +13,8 @@
 #   instructions:
 #   Save this file as /usr/bin/zoek
 #   Set execute permissions: chmod +x /usr/bin/zoek
-#   Currently works with linux distributions: Solus, Arch, Debian, Fedora.
+#   Currently works with linux distributions: Solus, Arch, Debian, Fedora, CentOS, Rocky Linux, AlmaLinux, Alpine, Void, Chimera
 
-STRING1=$1
 source /etc/os-release
 declare -A osInfo;
 osInfo[/usr/bin/eopkg]=eopkg
@@ -31,18 +30,21 @@ do
         echo Package manager: ${osInfo[$f]} on $PRETTY_NAME
 
 echo Searching for native packages...
-$f search $STRING1
+$f search $1
 #dirtyhackforarch, arch users are used to it anyway
-test -f /usr/bin/dnf && $f -Ss $STRING1
+test -f /usr/bin/dnf && $f -Ss $1
 echo 
 
-echo looking for snap packages...
-snap search $STRING1
+echo "looking for snap packages..."
+snap search $1
 echo 
 
-echo flatpak maybe?
-flatpak search $STRING1
+echo "flatpak maybe?"
+flatpak search $1
+echo 
 
-    fi
+echo "do u want check appimage?"
+curl -fsSL https://raw.githubusercontent.com/ivan-hc/AM/refs/heads/main/programs/x86_64-appimages | grep $1
+fi
 done
-echo 
+echo
